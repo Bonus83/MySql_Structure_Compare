@@ -1,6 +1,6 @@
 # MySql Structure Compare
 
-This is a simple script to show the differencen between two mysql databases.
+This is a simple script to show the differences between two mysql databases.
 The script prints the needed CREATE, DROP and ALTER statements to bring the target databse up to date.
 
 ## How to 
@@ -16,7 +16,7 @@ Deploy the files on your webserver and call the index.php
  
 ```
 The database is out of Sync!
-The following SQL commands need to be executed to bring the Live database tables up to date:
+The following SQL commands need to be executed to bring the live database tables up to date:
 
 
 CREATE TABLE `history` (
