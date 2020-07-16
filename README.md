@@ -5,8 +5,8 @@ The script prints the needed CREATE, DROP and ALTER statements to bring the targ
 
 ## How to 
 
-Fill in the information in the credentials.php
-Deploy the files on your webserver and call the index.php
+* fill in the information in the credentials.php
+* deploy the files on your webserver and call the index.php
 
 ## Requirements 
 * PHP 7.0+ (only tested with 7.0+) 
