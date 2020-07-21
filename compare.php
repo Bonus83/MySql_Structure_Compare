@@ -15,7 +15,7 @@ class db_compare
     function __construct()
     {
         //charset
-        $this->CHARACTER_SET = "utf8 COLLATE utf8_general_ci";
+        $this->CHARACTER_SET = "utf8mb4 COLLATE utf8mb4_unicode_ci";
 
         //get databases
         $credsdev = new pdo_credentials_dev();
@@ -23,6 +23,10 @@ class db_compare
         $this->DBdev = new db_structure($credsdev);
         $this->DBprod = new db_structure($credsprod);
 
+    }
+
+    public function setCharset($charset){
+        $this->CHARACTER_SET = $charset;
     }
 
     /**
@@ -260,7 +264,7 @@ class db_compare
 
                             if (is_array($differences) && !empty($differences))
                             {
-                                $modify_field = "ALTER TABLE $table MODIFY COLUMN `" . $fields[$n]["Field"] . "` " . $fields[$n]["Type"] . ' CHARACTER SET ' . $this->CHARACTER_SET;
+                                $modify_field = "ALTER TABLE $table MODIFY COLUMN `" . $fields[$n]["Field"] . "` " . $fields[$n]["Type"] . $this->getCharacterSet($field["Type"]);
                                 $modify_field .= (isset($fields[$n]["Default"]) && $fields[$n]["Default"] != '') ? ' DEFAULT \'' . $fields[$n]["Default"] . '\'' : '';
                                 $modify_field .= (isset($fields[$n]["Null"]) && $fields[$n]["Null"] == 'YES') ? ' NULL' : ' NOT NULL';
                                 $modify_field .= (isset($fields[$n]["Extra"]) && $fields[$n]["Extra"] != '') ? ' ' . $fields[$n]["Extra"] : '';
@@ -279,9 +283,9 @@ class db_compare
                     /*
                      * Add
                      */
-                    $add_field = "ALTER TABLE $table ADD COLUMN `" . $field["Field"] . "` " . $field["Type"] . " CHARACTER SET " . $this->CHARACTER_SET;
-                    $add_field .= (isset($field["Null"]) && $field["Null"] == 'YES') ? ' Null' : '';
-                    $add_field .= " DEFAULT " . $field["Default"];
+                    $add_field = "ALTER TABLE $table ADD COLUMN `" . $field["Field"] . "` " . $field["Type"] . $this->getCharacterSet($field["Type"]);
+                    $add_field .= (isset($field["Null"]) && $field["Null"] == 'YES') ? '' : ' NOT NULL';
+                    $add_field .= (isset($field["Default"]) && $field["Default"] != '') ? ' DEFAULT ' . $field["Default"] : '';
                     $add_field .= (isset($field["Extra"]) && $field["Extra"] != '') ? ' ' . $field["Extra"] : '';
                     $add_field .= ';';
                     $sql_commands_to_run[] = $add_field;
@@ -311,6 +315,17 @@ class db_compare
         }
 
         return false;
+    }
+
+
+    function getCharacterSet($type)
+    {
+        if(strpos($type, 'varchar') !== false) {
+            return " CHARACTER SET " . $this->CHARACTER_SET;
+        }
+        else{
+            return "";
+        }
     }
 
 }

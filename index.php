@@ -8,4 +8,8 @@ require "compare.php";
 
 $compare = new db_compare();
 
+// uncomment and change if needed
+// default is utf8mb4 COLLATE utf8mb4_unicode_ci
+//$compare->setCharset("utf8mb4 COLLATE utf8mb4_unicode_ci");
+
 $compare->compare();
